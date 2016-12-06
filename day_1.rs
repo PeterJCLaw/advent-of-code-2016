@@ -110,6 +110,11 @@ pub fn main()
         }
     }
 
-    let total = delta_north.abs() + delta_east.abs();
-    println!("{:?} North, {:?} East: {:?} Total", delta_north, delta_east, total);
+    print_location(delta_north, delta_east);
+}
+
+fn print_location(north: i32, east: i32)
+{
+    let total = north.abs() + east.abs();
+    println!("{:?} North, {:?} East: {:?} Total", north, east, total);
 }
