@@ -11,14 +11,34 @@ fi
 DAY=$1
 name=day_$DAY
 
+if [ ! -f "$name.test_in" ]
+then
+    echo "Test input for day $DAY is missing"
+    exit 2
+fi
+
+if [ ! -f "$name.test_expected" ]
+then
+    echo "Test expected outut for day $DAY is missing"
+    exit 3
+fi
+
 if [ ! -f "$name.in" ]
 then
-    echo "Input for day $DAY is missing"
-    exit 2
+    echo "Main input for day $DAY is missing"
+    exit 4
 fi
 
 mkdir -p target
 
 rustc $name.rs --out-dir=target
+
+echo ------------
+
+target/$name < $name.test_in | tee $name.test_actual
+
+echo ------------
+
+diff -u $name.test_expected $name.test_actual
 
 target/$name < $name.in
