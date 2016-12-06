@@ -73,6 +73,6 @@ pub fn main()
         }
     }
 
-    let total = delta_north + delta_east;
+    let total = delta_north.abs() + delta_east.abs();
     println!("{:?} North, {:?} East: {:?} Total", delta_north, delta_east, total);
 }
