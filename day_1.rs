@@ -57,7 +57,7 @@ pub fn main()
 
     let puzzle_a = false;
 
-    for piece in pieces
+    'instruction: for piece in pieces
     {
         if piece.starts_with('R')
         {
@@ -89,7 +89,7 @@ pub fn main()
         else
         {
             // part 2 extension:
-            for _ in 0..num
+            'steps: for _ in 0..num
             {
                 match facing_direction {
                     Direction::North => delta_north += 1,
@@ -101,7 +101,7 @@ pub fn main()
                 let location = Location { north: delta_north, east: delta_east };
                 if locations.contains(&location)
                 {
-                    break;
+                    break 'instruction;
                 }
                 else
                 {
