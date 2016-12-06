@@ -75,6 +75,7 @@ pub fn main()
         let rest = String::from_str(&piece[1..]).unwrap();
         let num = parse_single_number(rest);
 
+        //println!("{:?} : {:?}", piece, num);
         if puzzle_a
         {
             // part 1 simple handling:
@@ -106,6 +107,8 @@ pub fn main()
                 {
                     locations.insert(location);
                 }
+
+                //print_location(delta_north, delta_east);
             }
         }
     }
