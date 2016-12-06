@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]
+then
+    echo Usage $0 DAY
+    exit 1
+fi
+
+DAY=$1
+name=day_$DAY
+
+if [ ! -f "$name.in" ]
+then
+    echo "Input for day $DAY is missing"
+    exit 2
+fi
+
+mkdir -p target
+
+rustc $name.rs --out-dir=target
+
+target/$name < $name.in
