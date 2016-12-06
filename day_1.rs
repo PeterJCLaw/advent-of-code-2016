@@ -4,8 +4,8 @@ use advent_of_code::get_line;
 use advent_of_code::get_pieces;
 use advent_of_code::parse_single_number;
 
+use std::collections::HashSet;
 use std::io;
-
 use std::str::FromStr;
 
 enum Direction {
@@ -37,6 +37,13 @@ fn turn_right(current_direction: Direction)
     }
 }
 
+#[derive(PartialEq, Eq, Hash)]
+struct Location
+{
+    north: i32,
+    east: i32,
+}
+
 pub fn main()
 {
     let stdin = io::stdin();
@@ -46,6 +53,9 @@ pub fn main()
     let mut delta_north = 0;
 
     let mut facing_direction = Direction::North;
+    let mut locations = HashSet::new();
+
+    let puzzle_a = false;
 
     for piece in pieces
     {
@@ -65,11 +75,38 @@ pub fn main()
         let rest = String::from_str(&piece[1..]).unwrap();
         let num = parse_single_number(rest);
 
-        match facing_direction {
-            Direction::North => delta_north += num,
-            Direction::East => delta_east += num,
-            Direction::South => delta_north -= num,
-            Direction::West => delta_east -= num,
+        if puzzle_a
+        {
+            // part 1 simple handling:
+            match facing_direction {
+                Direction::North => delta_north += num,
+                Direction::East => delta_east += num,
+                Direction::South => delta_north -= num,
+                Direction::West => delta_east -= num,
+            }
+        }
+        else
+        {
+            // part 2 extension:
+            for _ in 0..num
+            {
+                match facing_direction {
+                    Direction::North => delta_north += 1,
+                    Direction::East => delta_east += 1,
+                    Direction::South => delta_north -= 1,
+                    Direction::West => delta_east -= 1,
+                }
+
+                let location = Location { north: delta_north, east: delta_east };
+                if locations.contains(&location)
+                {
+                    break;
+                }
+                else
+                {
+                    locations.insert(location);
+                }
+            }
         }
     }
 
