@@ -23,51 +23,76 @@ impl KeyPadPosition
     }
 
     fn get_key(&self)
-        -> char
+        -> Option<char>
     {
+        if self.row < 0 || self.row >= KEYPAD_SIZE ||
+        self.column < 0 || self.column >= KEYPAD_SIZE
+        {
+            return None;
+        }
+
         // TODO: can this be global static?
-        let pad: [[char; 3]; 3] = [
-            ['1', '2', '3'],
-            ['4', '5', '6'],
-            ['7', '8', '9'],
+        let pad: [[Option<char>; 3]; 3] = [
+            [Some('1'), Some('2'), Some('3')],
+            [Some('4'), Some('5'), Some('6')],
+            [Some('7'), Some('8'), Some('9')],
         ];
         return pad[self.row as usize][self.column as usize];
+    }
+
+    fn is_valid(&self)
+        -> bool
+    {
+        return match self.get_key() {
+            Some(_) => true,
+            None => false,
+        }
+    }
+
+    fn or_if_valid(&self, pos: KeyPadPosition)
+        -> KeyPadPosition
+    {
+        if pos.is_valid()
+        {
+            return pos;
+        }
+        return *self;
     }
 
     fn moved_up(&self)
         -> KeyPadPosition
     {
-        return KeyPadPosition {
+        return self.or_if_valid(KeyPadPosition {
             row: Self::bounded(self.row - 1),
             column: self.column,
-        };
+        });
     }
 
     fn moved_down(&self)
         -> KeyPadPosition
     {
-        return KeyPadPosition {
+        return self.or_if_valid(KeyPadPosition {
             row: Self::bounded(self.row + 1),
             column: self.column,
-        };
+        });
     }
 
     fn moved_right(&self)
         -> KeyPadPosition
     {
-        return KeyPadPosition {
+        return self.or_if_valid(KeyPadPosition {
             row: self.row,
             column: Self::bounded(self.column + 1),
-        };
+        });
     }
 
     fn moved_left(&self)
         -> KeyPadPosition
     {
-        return KeyPadPosition {
+        return self.or_if_valid(KeyPadPosition {
             row: self.row,
             column: Self::bounded(self.column - 1),
-        };
+        });
     }
 }
 
@@ -146,11 +171,19 @@ mod test
     }
 
     #[test]
+    fn test_get_key_invalid()
+    {
+        let pos = KeyPadPosition { row: -1, column: 0 };
+        let actual = pos.get_key();
+        assert_eq!(actual, None);
+    }
+
+    #[test]
     fn test_get_key_1()
     {
         let pos = KeyPadPosition { row: 0, column: 0 };
         let actual = pos.get_key();
-        assert_eq!(actual, '1');
+        assert_eq!(actual, Some('1'));
     }
 
     #[test]
@@ -158,7 +191,7 @@ mod test
     {
         let pos = KeyPadPosition { row: 0, column: 2 };
         let actual = pos.get_key();
-        assert_eq!(actual, '3');
+        assert_eq!(actual, Some('3'));
     }
 
     #[test]
@@ -166,7 +199,7 @@ mod test
     {
         let pos = KeyPadPosition { row: 1, column: 0 };
         let actual = pos.get_key();
-        assert_eq!(actual, '4');
+        assert_eq!(actual, Some('4'));
     }
 }
 
@@ -202,7 +235,10 @@ fn main()
             }
         }
         let key = pad_position.get_key();
-        print!("{}", key);
+        match key {
+            Some(k) => print!("{}", k),
+            None => panic!("Managed to create an invalid position: {:?}.", pad_position),
+        }
     }
     println!("");
 }
