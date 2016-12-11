@@ -3,4 +3,4 @@
 touch day_$1.rs
 code day_$1.rs
 
-nano day_$1.test_in day_$1.test_expected day_$i.in
+nano day_$1.test_in day_$1.test_expected day_$1.in
