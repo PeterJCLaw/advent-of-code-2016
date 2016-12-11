@@ -49,7 +49,7 @@ fn main()
                 let ref row = rows[r * 3 + r_];
                 for c in 0..3
                 {
-                    maybe_triangles[r + c].push(row[c]);
+                    maybe_triangles[r * 3 + c].push(row[c]);
                 }
             }
         }
