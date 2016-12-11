@@ -5,7 +5,7 @@ use std::io;
 use std::io::BufRead;
 
 // assume square
-const KEYPAD_SIZE: i32 = 3;
+const KEYPAD_SIZE: i32 = 5;
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone, Debug)]
 struct KeyPadPosition
@@ -228,7 +228,10 @@ mod test
 fn main()
 {
     let stdin = io::stdin();
-    let mut pad_position = KeyPadPosition { row: 1, column: 1 };
+    // part 1
+    // let mut pad_position = KeyPadPosition { row: 1, column: 1 };
+    // part 2
+    let mut pad_position = KeyPadPosition { row: 2, column: 0 };
 
     for line in stdin.lock().lines()
     {
