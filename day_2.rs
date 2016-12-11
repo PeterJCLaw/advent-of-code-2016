@@ -34,24 +34,40 @@ impl KeyPadPosition
         return pad[self.row as usize][self.column as usize];
     }
 
-    fn move_up(&mut self)
+    fn moved_up(&self)
+        -> KeyPadPosition
     {
-        self.row = Self::bounded(self.row - 1);
+        return KeyPadPosition {
+            row: Self::bounded(self.row - 1),
+            column: self.column,
+        };
     }
 
-    fn move_down(&mut self)
+    fn moved_down(&self)
+        -> KeyPadPosition
     {
-        self.row = Self::bounded(self.row + 1);
+        return KeyPadPosition {
+            row: Self::bounded(self.row + 1),
+            column: self.column,
+        };
     }
 
-    fn move_right(&mut self)
+    fn moved_right(&self)
+        -> KeyPadPosition
     {
-        self.column = Self::bounded(self.column + 1);
+        return KeyPadPosition {
+            row: self.row,
+            column: Self::bounded(self.column + 1),
+        };
     }
 
-    fn move_left(&mut self)
+    fn moved_left(&self)
+        -> KeyPadPosition
     {
-        self.column = Self::bounded(self.column - 1);
+        return KeyPadPosition {
+            row: self.row,
+            column: Self::bounded(self.column - 1),
+        };
     }
 }
 
@@ -64,73 +80,69 @@ mod test
     #[test]
     fn test_bounded_up_from_first_row()
     {
-        let mut pos = KeyPadPosition { row: 0, column: 1 };
-        let expected = pos.clone();
-        pos.move_up();
-        assert_eq!(pos, expected);
+        let expected = KeyPadPosition { row: 0, column: 1 };
+        let actual = expected.moved_up();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_left_from_first_column()
     {
-        let mut pos = KeyPadPosition { row: 1, column: 0 };
-        let expected = pos.clone();
-        pos.move_left();
-        assert_eq!(pos, expected);
+        let expected = KeyPadPosition { row: 1, column: 0 };
+        let actual = expected.moved_left();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_down_from_last_row()
     {
-        let mut pos = KeyPadPosition { row: KEYPAD_SIZE - 1, column: 1 };
-        let expected = pos.clone();
-        pos.move_down();
-        assert_eq!(pos, expected);
+        let expected = KeyPadPosition { row: KEYPAD_SIZE - 1, column: 1 };
+        let actual = expected.moved_down();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_right_from_last_col()
     {
-        let mut pos = KeyPadPosition { row: 1, column: KEYPAD_SIZE - 1 };
-        let expected = pos.clone();
-        pos.move_right();
-        assert_eq!(pos, expected);
+        let expected = KeyPadPosition { row: 1, column: KEYPAD_SIZE - 1 };
+        let actual = expected.moved_right();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_up_from_middle()
     {
-        let mut pos = KeyPadPosition { row: 1, column: 1 };
+        let pos = KeyPadPosition { row: 1, column: 1 };
         let expected = KeyPadPosition { row: 0, column: 1 };
-        pos.move_up();
-        assert_eq!(pos, expected);
+        let actual = pos.moved_up();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_left_from_middle()
     {
-        let mut pos = KeyPadPosition { row: 1, column: 1 };
+        let pos = KeyPadPosition { row: 1, column: 1 };
         let expected = KeyPadPosition { row: 1, column: 0 };
-        pos.move_left();
-        assert_eq!(pos, expected);
+        let actual = pos.moved_left();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_down_from_middle()
     {
-        let mut pos = KeyPadPosition { row: 1, column: 1 };
+        let pos = KeyPadPosition { row: 1, column: 1 };
         let expected = KeyPadPosition { row: 2, column: 1 };
-        pos.move_down();
-        assert_eq!(pos, expected);
+        let actual = pos.moved_down();
+        assert_eq!(actual, expected);
     }
 
     #[test]
     fn test_bounded_right_from_middle()
     {
-        let mut pos = KeyPadPosition { row: 1, column: 1 };
+        let pos = KeyPadPosition { row: 1, column: 1 };
         let expected = KeyPadPosition { row: 1, column: 2 };
-        pos.move_right();
-        assert_eq!(pos, expected);
+        let actual = pos.moved_right();
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -170,19 +182,19 @@ fn main()
         {
             if chr == 'U'
             {
-                pad_position.move_up();
+                pad_position = pad_position.moved_up();
             }
             else if chr == 'D'
             {
-                pad_position.move_down();
+                pad_position = pad_position.moved_down();
             }
             else if chr == 'R'
             {
-                pad_position.move_right();
+                pad_position = pad_position.moved_right();
             }
             else if chr == 'L'
             {
-                pad_position.move_left();
+                pad_position = pad_position.moved_left();
             }
             else
             {
