@@ -10,7 +10,7 @@ fn is_valid(mut numbers: Vec<i32>)
 {
     if numbers.len() != 3
     {
-        return false;
+        panic!("Non-triangle vector passed: {:?}.", numbers);
     }
     numbers.sort();
     return numbers[0] >= 0 && numbers[0] + numbers[1] > numbers[2];
