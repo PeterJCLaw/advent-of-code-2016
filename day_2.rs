@@ -31,11 +31,33 @@ impl KeyPadPosition
             return None;
         }
 
-        let pad: [[Option<char>; 3]; 3] = [
-            [Some('1'), Some('2'), Some('3')],
-            [Some('4'), Some('5'), Some('6')],
-            [Some('7'), Some('8'), Some('9')],
-        ];
+        let pad: [[Option<char>; 5]; 5];
+        if KEYPAD_SIZE == 3
+        {
+            // part 1
+            pad = [
+                [Some('1'), Some('2'), Some('3'), None,      None],
+                [Some('4'), Some('5'), Some('6'), None,      None],
+                [Some('7'), Some('8'), Some('9'), None,      None],
+                [None,      None,      None,      None,      None],
+                [None,      None,      None,      None,      None],
+            ];
+        }
+        else if KEYPAD_SIZE == 5
+        {
+            // part 2
+            pad = [
+                [None,      None,      Some('1'), None,      None],
+                [None,      Some('2'), Some('3'), Some('4'), None],
+                [Some('5'), Some('6'), Some('7'), Some('8'), Some('9')],
+                [None,      Some('A'), Some('B'), Some('C'), None],
+                [None,      None,      Some('D'), None,      None],
+            ];
+        }
+        else
+        {
+            panic!("Unexpected KEYPAD_SIZE: {:?}.", KEYPAD_SIZE);
+        }
         return pad[self.row as usize][self.column as usize];
     }
 
