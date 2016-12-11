@@ -23,6 +23,7 @@ fn main()
     for line in stdin.lock().lines()
     {
         let mut numbers = get_numbers(line.unwrap());
+        //println!("{:?}", numbers);
         if is_valid(numbers)
         {
             n_possible += 1;
