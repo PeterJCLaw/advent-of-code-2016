@@ -31,7 +31,6 @@ impl KeyPadPosition
             return None;
         }
 
-        // TODO: can this be global static?
         let pad: [[Option<char>; 3]; 3] = [
             [Some('1'), Some('2'), Some('3')],
             [Some('4'), Some('5'), Some('6')],
