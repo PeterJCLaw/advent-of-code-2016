@@ -50,6 +50,16 @@ fn compute_checksum(name: &str)
     return checksum;
 }
 
+fn rot_n(letter: char, n: i32)
+    -> char
+{
+    let origin = 'a' as u8;
+    let letter_value = letter as u8 - origin;
+    let rotated_value = ((letter_value as i32 + n) % 26) as u8;
+    let new_letter = (rotated_value + origin) as char;
+    return new_letter;
+}
+
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 struct Room<'a>
 {
@@ -78,6 +88,7 @@ impl<'a> Room<'a>
 mod test
 {
     use compute_checksum;
+    use rot_n;
     use Room;
 
     #[test]
@@ -127,6 +138,71 @@ mod test
         let expected = "loart";
         let actual = compute_checksum(input);
         assert_eq!(expected, actual);
+    }
+
+    fn assert_rot_n(input: char, n: i32, expected: char)
+    {
+        let actual = rot_n(input, n);
+        assert_eq!(expected, actual);
+    }
+
+    fn assert_rot_26(input: char)
+    {
+        assert_rot_n(input, 26, input)
+    }
+
+    #[test]
+    fn test_rot_2_a()
+    {
+        assert_rot_n('a', 2, 'c');
+    }
+
+    #[test]
+    fn test_rot_2_q()
+    {
+        assert_rot_n('q', 2, 's');
+    }
+
+    #[test]
+    fn test_rot_2_z()
+    {
+        assert_rot_n('z', 2, 'b');
+    }
+
+    #[test]
+    fn test_rot_26_a()
+    {
+        assert_rot_26('a');
+    }
+
+    #[test]
+    fn test_rot_26_q()
+    {
+        assert_rot_26('q');
+    }
+
+    #[test]
+    fn test_rot_26_z()
+    {
+        assert_rot_26('z');
+    }
+
+    #[test]
+    fn test_rot_32_a()
+    {
+        assert_rot_n('a', 32, 'g');
+    }
+
+    #[test]
+    fn test_rot_32_q()
+    {
+        assert_rot_n('q', 32, 'w');
+    }
+
+    #[test]
+    fn test_rot_32_z()
+    {
+        assert_rot_n('z', 32, 'f');
     }
 }
 
