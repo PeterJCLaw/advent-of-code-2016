@@ -1,4 +1,3 @@
 language: rust
 script:
-  - ./.days | xargs -l ./self-test
   - ./.days | xargs -l ./run
