@@ -1,40 +1,83 @@
 mod advent_of_code;
 
-use advent_of_code::get_numbers;
+use std::cmp::Ordering;
 
 use std::collections::HashMap;
 
 use std::io;
 use std::io::BufRead;
 
-fn compute_checksum(name: str)
-    -> str
-{
-    let mut counts = HashMap::new();
+const CHECKSUM_SIZE: usize = 5;
 
-    return "nope";
+fn compare_counts(a: &(char, usize), b: &(char, usize))
+    -> Ordering
+{
+    let mut cmp = b.1.cmp(&a.1);
+    if cmp == Ordering::Equal
+    {
+        cmp = a.0.cmp(&b.0);
+    }
+    return cmp;
 }
 
-#[derive(PartialEq, Eq, Hash, Copy, Clone, Debug)]
-struct Room
+fn compute_checksum(name: &str)
+    -> String
 {
-    checksum: str,
-    name: str,
+    let mut counts: HashMap<char, usize> = HashMap::new();
+
+    for letter in name.chars()
+    {
+        if letter == '-'
+        {
+            continue;
+        }
+
+        let count = counts.entry(letter).or_insert(0);
+        *count += 1;
+    }
+
+    let mut sorted_counts: Vec<(char, usize)> = counts.into_iter().collect();
+    sorted_counts.sort_by(compare_counts);
+
+    let mut checksum = String::with_capacity(CHECKSUM_SIZE);
+
+    for pair in sorted_counts[..CHECKSUM_SIZE].iter()
+    {
+        let (letter, _) = *pair;
+        checksum.push(letter);
+    }
+
+    return checksum;
+}
+
+#[derive(PartialEq, Eq, Hash, Clone, Debug)]
+struct Room<'a>
+{
+    checksum: &'a str,
+    name: &'a str,
     sector_id: i32,
 }
 
-impl Room
+impl<'a> Room<'a>
 {
-    fn decode(text: String)
-        -> Room
+    fn decode(text: &'a str)
+        -> Room<'a>
     {
-        return Room { checksum: "" };
+        let last_dash = text.rfind('-').unwrap();
+        let checksum_outer_size = CHECKSUM_SIZE + 2;
+
+        return Room {
+            name: text[.. last_dash].as_ref(),
+            sector_id: text[last_dash + 1 .. text.len() - checksum_outer_size].parse::<i32>().unwrap(),
+            checksum: text[text.len() - 1 - CHECKSUM_SIZE .. text.len() - 1].as_ref(),
+        };
     }
 }
 
 #[cfg(test)]
 mod test
 {
+    use compute_checksum;
     use Room;
 
     #[test]
@@ -46,7 +89,7 @@ mod test
             name: "aaaaa-bbb-z-y-x",
             sector_id: 123,
         };
-        let actual = Room.decode(input);
+        let actual = Room::decode(input);
         assert_eq!(expected, actual);
     }
 
@@ -93,9 +136,10 @@ fn main()
     let stdin = io::stdin();
     let mut total_sector_id = 0;
 
-    for line in stdin.lock().lines()
+    for wrapped_line in stdin.lock().lines()
     {
-        let room = Room::decode(line.unwrap());
+        let line = wrapped_line.unwrap();
+        let room = Room::decode(&line);
         if room.checksum == compute_checksum(room.name)
         {
             total_sector_id += room.sector_id;
