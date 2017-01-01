@@ -60,6 +60,25 @@ fn rot_n(letter: char, n: i32)
     return new_letter;
 }
 
+fn shift(text: &str, n: i32)
+    -> String
+{
+    let mut string = String::with_capacity(text.len());
+    for letter in text.chars()
+    {
+        if letter == '-'
+        {
+            string.push(' ');
+        }
+        else
+        {
+            string.push(rot_n(letter, n));
+        }
+    }
+    return string;
+}
+
+
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 struct Room<'a>
 {
@@ -90,6 +109,7 @@ mod test
     use compute_checksum;
     use rot_n;
     use Room;
+    use shift;
 
     #[test]
     fn test_decode_room()
@@ -203,6 +223,14 @@ mod test
     fn test_rot_32_z()
     {
         assert_rot_n('z', 32, 'f');
+    }
+
+    #[test]
+    fn test_shift()
+    {
+        let expected = "de f";
+        let actual = shift("ab-c", 3);
+        assert_eq!(actual, expected);
     }
 }
 
