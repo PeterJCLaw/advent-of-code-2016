@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]
+then
+    echo Usage $0 DAY
+    exit 1
+fi
+
+DAY=$1
+name=day_$DAY
+
+mkdir -p target/self_test
+
+rustc $name.rs --cfg=test --out-dir=target/self_test
+
+target/self_test/$name

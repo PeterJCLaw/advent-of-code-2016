@@ -5,7 +5,11 @@ use std::io;
 use std::io::BufRead;
 
 // assume square
+#[cfg(not(test))]
 const KEYPAD_SIZE: i32 = 5;
+
+#[cfg(test)]
+const KEYPAD_SIZE: i32 = 3;
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone, Debug)]
 struct KeyPadPosition
