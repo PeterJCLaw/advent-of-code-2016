@@ -1,4 +1,4 @@
 language: rust
 script:
-  - ls day_*rs | sed -e 's/day_//' -e 's/\.rs//' | xargs -l ./self-test
-  - ls day_*rs | sed -e 's/day_//' -e 's/\.rs//' | xargs -l ./run
+  - ./.days | xargs -l ./self-test
+  - ./.days | xargs -l ./run

@@ -1,0 +1,2 @@
+#!/bin/sh
+ls day_*rs | sed -e 's/day_//' -e 's/\.rs//'
