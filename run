@@ -33,6 +33,8 @@ mkdir -p target
 
 rustc $name.rs --out-dir=target
 
+export RUST_BACKTRACE=on
+
 echo ------------
 
 target/$name < $name.test_in | tee $name.test_actual

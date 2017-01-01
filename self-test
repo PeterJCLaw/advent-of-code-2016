@@ -15,4 +15,6 @@ mkdir -p target/self_test
 
 rustc $name.rs --cfg=test --out-dir=target/self_test
 
+export RUST_BACKTRACE=on
+
 target/self_test/$name
