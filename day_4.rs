@@ -247,6 +247,16 @@ fn main()
         if room.checksum == compute_checksum(room.name)
         {
             total_sector_id += room.sector_id;
+
+            if false
+            {
+                // part 2
+                let name = shift(room.name, room.sector_id);
+                if name == "northpole object storage"
+                {
+                    println!("{}: {}", name, room.sector_id);
+                }
+            }
         }
     }
 
